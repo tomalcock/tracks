@@ -15,9 +15,9 @@ type Artist = {
   image: string;
 };
 
-
 type LikedTracksContextType = {
   likedTracks: Track[];
+  LikedTracksIds: number[];
   addLikedTrack: (track: Track) => void;
 };
 
@@ -29,6 +29,8 @@ type LikedTracksProviderProps = {
   children: ReactNode;
 };
 
+let LikedTracksIds = [0];
+
 export const LikedTracksProvider: React.FC<LikedTracksProviderProps> = ({
   children,
 }) => {
@@ -36,10 +38,13 @@ export const LikedTracksProvider: React.FC<LikedTracksProviderProps> = ({
 
   const addLikedTrack = (track: Track) => {
     setLikedTracks((prevLikedTracks) => [...prevLikedTracks, track]);
+    LikedTracksIds.push(track.id);
   };
 
   return (
-    <LikedTracksContext.Provider value={{ likedTracks, addLikedTrack }}>
+    <LikedTracksContext.Provider
+      value={{ likedTracks, LikedTracksIds, addLikedTrack }}
+    >
       {children}
     </LikedTracksContext.Provider>
   );

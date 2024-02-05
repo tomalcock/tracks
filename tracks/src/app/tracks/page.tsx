@@ -4,8 +4,9 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import convert from "../../utils/time";
 import { BiSolidHeartCircle } from "react-icons/bi";
+import { TiTick } from "react-icons/ti";
 import NavBar from "@/components/Navbar";
-import { useLikedTracks } from "../LikedTracksContext";
+import { useLikedTracks } from "../../contexts/LikedTracksContext";
 
 type Track = {
   id: number;
@@ -21,7 +22,7 @@ type Artist = {
 };
 
 export default function Tracks() {
-  const { addLikedTrack } = useLikedTracks();
+  const { LikedTracksIds, addLikedTrack } = useLikedTracks();
   const [tracks, setTracks] = useState([]);
 
   useEffect(() => {
@@ -39,13 +40,15 @@ export default function Tracks() {
     addLikedTrack(track);
   };
 
+  const isTrackLiked = (trackId: number) => LikedTracksIds.includes(trackId);
+
   return (
     <div className="my-12">
       <NavBar />
-      <ul>
+      <ul className="flex flex-wrap">
         {tracks.map((track: Track) => {
           return (
-            <li key={track.id}>
+            <li key={track.id} className="my-2 mx-2">
               <h1>{track.name}</h1>
               <h3>{convert(track.duration)}</h3>
               <h2>{track.artist.name}</h2>
@@ -64,8 +67,13 @@ export default function Tracks() {
                     duration: track.duration,
                   })
                 }
+                disabled={LikedTracksIds.includes(track.id)}
               >
-                <BiSolidHeartCircle size={40} />
+                {!isTrackLiked(track.id) ? (
+                  <BiSolidHeartCircle size={70} />
+                ) : (
+                  <TiTick size={70} />
+                )}
               </button>
             </li>
           );
