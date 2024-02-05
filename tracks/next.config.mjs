@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+    images: {
+        domains: ['cdn.uppbeat.io', 'cdn.musicvine.com']
+    }
+};
 
 export default nextConfig;
